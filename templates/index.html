@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Image Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        textarea {
+            padding: 20px;
+            width: 70%;
+            position: relative;
+            top: 20px;
+            font-size: 16px;
+            height: 200px;
+            resize: none;
+            white-space: pre-wrap; /* Ensures text wraps correctly */
+            border-radius: 20px;
+            overflow-wrap: break-word; /* Ensures text breaks at word boundaries */
+            max-height: 200px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 20px;
+            position: relative;
+            top: 90px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        input[type="button"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 20px;
+            position: relative;
+            top: 90px;
+            left: 20px;
+            cursor: pointer;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+        .image-container {
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Generate 3D Images</h1>
+
+    <div class="form-container">
+        <form method="POST">
+            <!-- Added textarea with line restriction -->
+            <textarea id="prompt" name="prompt" rows="6" placeholder="Enter description..." required></textarea>
+            <div>
+                <input type="submit" value="Generate Image">
+                <input type="button" value="Clear Textarea" onclick="clearTextarea()">
+            </div>
+        </form>
+    </div>
+
+    {% if image_url %}
+    <div class="image-container">
+        <img src="{{ image_url }}" alt="Generated Image">
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    const textarea = document.getElementById('prompt');
+
+    // Function to handle input and break text into lines of max 200 characters
+    textarea.addEventListener('input', function() {
+        let lines = textarea.value.split('\n'); // Split the text by line breaks
+
+        // Loop over each line to check if it exceeds 200 characters
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].length > 200) {
+                // If a line exceeds 200 characters, break it into multiple lines
+                while (lines[i].length > 200) {
+                    // Insert a line break every 200 characters
+                    lines[i] = lines[i].slice(0, 200) + '\n' + lines[i].slice(200);
+                }
+            }
+        }
+
+        // Join the lines back into a single string and set it back to the textarea
+        textarea.value = lines.join('\n');
+    });
+
+    // Function to clear the textarea when the button is clicked
+    function clearTextarea() {
+        textarea.value = '';
+    }
+</script>
+
+</body>
+</html>
